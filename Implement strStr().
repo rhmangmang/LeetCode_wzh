@@ -1,0 +1,29 @@
+// https://www.nowcoder.com/practice/cc0c03ec17ad44c09d25870c301e0db7?tpId=46&tqId=29151&tPage=7&rp=7&ru=/ta/leetcode&qru=/ta/leetcode/question-ranking
+
+class Solution {
+public:
+    char *strStr(char *haystack, char *needle) {
+        int i = 0, j = 0;
+        char* pointer = NULL;
+
+        // 当needle指向的字符串为""，则pointer指向haystack中的第一个元素
+        if (needle[0] == '\0') {
+            pointer = haystack;
+            return pointer;
+        }
+        for (i = 0; haystack[i] != '\0'; ++i) {
+            if (haystack[i] == needle[j]) {
+                pointer = haystack + i;
+                while (needle[j] != '\0') {
+                    if (haystack[i+j] != needle[j]) {
+                        j = 0;
+                        pointer = NULL;
+                        break;
+                    }
+                    ++j;
+                }
+            }
+        }
+        return pointer;
+    }
+};

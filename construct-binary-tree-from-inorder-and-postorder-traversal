@@ -1,0 +1,62 @@
+#include <iostream>
+#include <algorithm>
+#include <vector> 
+using namespace std;  
+
+struct TreeNode {
+     int val;
+     TreeNode *left;
+     TreeNode *right;
+};
+
+class Solution {
+public:
+    TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder) {
+		struct TreeNode* root;
+    	sub_build_tree(inorder, postorder, root, 0, postorder.size()-1);
+    	return root;
+    }
+	void sub_build_tree(vector<int> &inorder, vector<int> &postorder, struct TreeNode*& r, int L, int R){
+		r = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+		
+		int i;
+		
+		if (L > R){
+			r = NULL;
+			return ;
+		}
+		r->val = postorder.back();
+		postorder.pop_back();
+		
+		for (i = L; i <= R; ++i) {
+			if (inorder[i] == r->val)
+				break;
+		}
+		sub_build_tree(inorder, postorder, r->right, i+1, R);
+		sub_build_tree(inorder, postorder,r->left, L, i-1);
+	}
+};
+
+
+void in_traverse(struct TreeNode* r) {
+	if (r == NULL) return;
+	cout << r->val;
+	in_traverse(r->left);
+	in_traverse(r->right);
+}
+
+int main(){
+//	前序为5 6 8 9 7 10 
+	int inarray[6] = {8,6,9,5,10,7};  
+	int postarray[6] = {8,9,6,10,7,5};  
+	vector<int> inorder(inarray, inarray+6), postorder(postarray, postarray+6);
+	
+	Solution s;
+	
+	struct TreeNode* r;
+	r = s.buildTree(inorder, postorder);
+	
+	in_traverse(r);
+
+	return 0;
+}

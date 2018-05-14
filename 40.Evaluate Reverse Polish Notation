@@ -1,0 +1,66 @@
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+// 这个函数用来判断是否是操作符
+bool isOperator(string ele) {
+	if (ele.size() != 1) return false;
+	char c = ele[0];
+	if (c == '+' || c == '-' || c == '*' || c == '/' ) return true;
+	
+	return false;
+} 
+
+int toNumber(string ele) {
+    int rel = 0, i = 0;
+    int isNegative = false;
+    
+    if (ele[0] == '-') {
+        isNegative = true;
+        i = 1;
+    }
+    for (; i < ele.size(); ++i) {
+        rel = rel*10+(ele[i]-'0');
+    }
+    return isNegative?(-1*rel):rel;
+}
+
+int compute(int L, int R, char operato) {
+	switch (operato) {
+		case '+':
+			return L+R;
+		case '-':
+			return L-R;
+		case '*':
+			return L*R;
+		case '/':
+			return L/R;		
+	}
+}
+
+int main(void) {
+	char* str[3] = {"3", "-4", "+"};
+	vector<string> v(str, str+3);
+	stack<char> operatorStack;
+	stack<int> numStack;
+	
+	for (int i=0; i<v.size(); ++i) {
+		if (isOperator(v[i])) {
+			int R = numStack.top();
+			numStack.pop();
+			int L = numStack.top();
+			numStack.pop();	
+			int rel = compute(L, R, v[i][0]);		
+			numStack.push(rel);
+		} else {
+			int num = toNumber(v[i]);
+			cout << num << endl;
+			numStack.push(num);
+		}
+	}
+	cout << numStack.top();
+	return 0;
+} 

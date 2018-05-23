@@ -1,0 +1,282 @@
+#include <iostream>
+#include <cstdio>
+#include <string>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <map>
+#include <set>
+#include <queue>
+
+using namespace std;
+
+int singleNumber(int A[], int n) {
+    int forBit[32] = {0};
+    int count = 0;
+    
+    for (int i = 0; i < n; ++i) {
+        int temp = A[i];
+        printf("%d\n", temp);
+        for (int j = 0; j < 32; ++j) {
+            if ((temp & 1)) {
+				++forBit[j];
+				++count; 
+			} 
+            temp = temp >> 1;
+        }
+    }
+    int rel = 0;
+    for (int j = 0; j < 32; ++j) {
+//        rel |= ((forBit[j] % 3) >> j);
+//		forBit[j] = forBit[j] % 3;
+		printf("%d", forBit[j]);
+    }
+    printf("count:%d", count);
+    return rel;
+}
+
+// 这个函数用来判断是否是操作符
+bool isOperator(string ele) {
+	if (ele.size() != 1) return false;
+	char c = ele[0];
+	if (c == '+' || c == '-' || c == '*' || c == '/' ) return true;
+	
+	return false;
+} 
+
+int toNumber(string ele) {
+    int rel = 0, i = 0;
+    int isNegative = false;
+    
+    if (ele[0] == '-') {
+        isNegative = true;
+        i = 1;
+    }
+    for (; i < ele.size(); ++i) {
+        rel = rel*10+(ele[i]-'0');
+    }
+    return isNegative?(-1*rel):rel;
+}
+
+int compute(int L, int R, char operato) {
+	switch (operato) {
+		case '+':
+			return L+R;
+		case '-':
+			return L-R;
+		case '*':
+			return L*R;
+		case '/':
+			return L/R;		
+	}
+}
+
+int search1(int A[], int L, int R, int target) {
+    int mid;
+    while (L <= R) {
+        mid = (R+L)/2;
+        if (A[mid] == target) return mid;
+        if (A[mid] > target) R = mid-1;
+        else L = mid+1;
+    }
+    if (A[mid] > target) return mid-1;
+    else return mid+1;
+}
+
+int searchInsert(int A[], int n, int target) {
+    return search1(A, 0, n-1, target);
+}
+
+void findGrid (vector<vector<int> >& grid, vector<int>& rowsNum, vector<int>& colsNum) {
+    //找行中最大的数
+    int colLen = grid[0].size(), rowLen = grid.size();
+    
+    for (int i = 0; i < rowLen; ++i) {
+        int max = 0;
+        for (int j = 0; j < colLen; ++j) {
+            if (grid[i][j] > max) max = grid[i][j];
+        }
+        rowsNum.push_back(max);
+    }
+    
+    for (int i = 0; i < colLen; ++i) {
+        int max = 0;
+        for (int j = 0; j < rowLen; ++j) {
+            if (grid[j][i] > max) max = grid[j][i];
+        }
+        colsNum.push_back(max);
+    }
+}
+
+int maxIncreaseKeepingSkyline(vector<vector<int> >& grid) {
+    vector<int> rowsNum;
+    vector<int> colsNum;
+    findGrid(grid, rowsNum, colsNum);
+    int count = 0;
+    
+    for (int i = 0; i < 4; ++i) {
+    	cout << rowsNum[i];
+    }
+    cout << endl;
+    
+    for (int i = 0; i < 4; ++i) {
+    	cout << colsNum[i];
+    }
+    cout << endl;
+    
+    int colLen = grid[0].size(), rowLen = grid.size();
+
+    for (int i = 0; i < rowLen; ++i) {
+        for (int j = 0; j < colLen; ++j) {
+            if (rowsNum[i] > colsNum[j])  count += colsNum[j]-grid[i][j];
+            else count += rowsNum[i]-grid[i][j];
+//            cout << "count:" << count << endl;
+        }
+    }
+    return count;
+}
+
+bool isGreat26 (int sec, int fir) {
+	int rel = (sec-'0')*10+(fir-'0');
+	cout << sec;
+	return rel>26;
+}
+
+int numDecodings(string s) {
+	int strLen = s.size();
+	int arr[strLen];
+	arr[strLen-1] = 1;
+	
+	if (isGreat26(s[strLen-2], s[strLen-1])) {
+		arr[strLen-2] = arr[strLen-1];
+	} else {
+		arr[strLen-2] = 2;
+	}
+	
+	for (int i = strLen-3; i >=0; --i) {
+		if (isGreat26(s[i], s[i+1])) {
+			arr[i] = arr[i+1];
+		} else {
+			arr[i] = arr[i+1] + arr[i+2];
+		}
+	}
+    return arr[0];
+}
+
+
+
+//
+bool isTraversed[4][4] = {false};
+
+bool isEdge(int rowIndex, int colIndex, int rowNum, int colNum) {
+	if (rowIndex == 0 || rowIndex == rowNum-1) return true;
+	if (colIndex == 0 || colIndex == colNum-1) return true;
+	return false;
+}
+
+//用isTraversed这个二维数组来
+void getIndex(map<int, vector<int> >& m, vector<vector<char> >& board) {
+	int rowNum = board.size();
+	int colNum = board[0].size();
+	
+	for (int i = 0; i < board.size(); ++i) {
+		for (int j = 0; j < board[i].size(); ++j) {
+			if (!isEdge(i, j, rowNum, colNum)) continue;
+			if (board[i][j] == 'O') {
+				vector<int> v;
+				if (m.count(i) == 0) {
+					v.push_back(j);
+					m[i] = v;
+				} else {
+					v = m[i];
+					v.push_back(j);
+					m[i] = v;
+				}
+			}
+		}
+	}
+}
+void solve(vector<vector<char> >& board) {
+	map<int, vector<int> > m;
+	getIndex(m, board);
+
+	int rowNum = board.size(), colNum = board[0].size();
+	
+	map<int, vector<int> >::iterator it;
+	it = m.begin();
+	
+	queue<map<int, int> > q;
+	while (it != m.end()) {
+		vector<int> v = it->second;
+		
+		for (int i = 0; i < v.size(); ++i) {
+			// 广度优先来遍历
+			map<int, int> m1;
+			m1[it->first] = v[i];
+			q.push(m1);
+			isTraversed[it->first][v[i]]=true;
+
+			while (!q.empty()) {
+				m1 = q.front();
+				q.pop();
+				
+				map<int, int>::iterator itM = m1.begin();
+				
+//				cout << itM->first << itM->second;
+				//上下左右
+				int rI = itM->first, cI = itM->second;
+				if ((rI-1 >= 0) && (board[rI-1][cI] == 'O') && !isTraversed[rI-1][cI]) {
+					m1[rI-1] = cI;
+					q.push(m1);
+					isTraversed[rI-1][cI] = true;
+				}
+
+				if ((rI+1 <= rowNum-1) && (board[rI+1][cI] == 'O') && !isTraversed[rI+1][cI]) {
+					m1[rI+1] = cI;
+					q.push(m1);
+					isTraversed[rI+1][cI] = true;
+				}
+				
+				if ((cI-1 >= 0) && (board[rI][cI-1] == 'O') && !isTraversed[rI][cI-1]) {
+					m1[rI] = cI-1;
+					q.push(m1);
+					isTraversed[rI][cI-1] = true;
+				}
+					
+				if ((cI+1 <= colNum-1) && (board[rI][cI+1] == 'O') && !isTraversed[rI][cI+1]) {
+					m1[rI] = cI+1;
+					q.push(m1);
+					isTraversed[rI][cI+1] = true;
+				}			
+			}
+//			cout << it->first << v[i];
+		}
+		++it;
+	}
+    for(int i = 0; i < rowNum; ++i) {
+        for(int j = 0; j <  colNum; ++j) {
+            if (isTraversed[i][j] == false) board[i][j] = 'X';
+        }
+    }
+}
+    
+int main(void) {
+	vector<vector<char> > board(4, vector<char>(4));
+	char aChar[4][4] = {{'X', 'X', 'X', 'X'}, {'X', 'O', 'O', 'X'}, {'X', 'X', 'O', 'X'}, {'X', 'O', 'X', 'X'}};
+	
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			board[i][j] = aChar[i][j];
+		}
+	}
+	solve(board);
+	
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			cout << board[i][j];
+		}
+		cout << endl;
+	}
+	
+	return 0;
+} 

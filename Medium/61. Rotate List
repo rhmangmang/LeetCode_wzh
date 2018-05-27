@@ -1,0 +1,32 @@
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        int LLength = 0;
+        if (head == null) return head;
+        ListNode p = head, tail;
+        
+        while (p != null) {
+            ++LLength;
+            p = p.next;
+        }
+        if ((k % LLength) == 0) return head;
+        if (k > LLength) k %= LLength;
+        
+        p = head;
+        tail = head;
+        
+        /*此时的k肯定小于链表的长度*/
+        for (int i = 0; i < k; ++i) {
+            p = p.next;
+        }
+        
+        while (p.next != null) {
+            tail = tail.next;
+            p = p.next;
+        }
+        p.next = head;
+        
+        head = tail.next;
+        tail.next = null;
+        return head;
+    }
+}

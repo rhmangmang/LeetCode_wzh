@@ -1,0 +1,38 @@
+class Solution {
+    public int numTrees(int n) {
+        int[] dk = new int[n + 1];
+        Arrays.fill(dk, -1);
+        
+        if (n <= 3) {
+            if (n != 3) return n;
+            else return 5;
+        }
+        dk[0] = 0; dk[1] = 1; dk[2] = 2; dk[3] = 5;
+
+        return helper(n, dk);
+    }
+
+    public int helper (int n, int[] dk) {
+        if (n <= 3) return dk[n];
+        if (dk[n] != -1) return dk[n];
+        int count = 0;
+
+        for (int i = 0; i <= (n-1)/2; ++i) {
+            int temp;
+            if (dk[n - (i + 1)] != -1)  temp = dk[n - (i + 1)];
+            else {
+                temp = helper(n - (i + 1), dk);
+                dk[n - (i + 1)] = temp;
+            }
+
+            if ((i+1) > 2) {
+                if ((n % 2 == 1) && (i == (n-1)/2)) count += temp*temp;
+                else count += dk[i+1-1]*temp*2;
+            } else {
+                count += 2*temp;
+            }
+        }
+        dk[n] = count;
+        return count;
+    }
+}

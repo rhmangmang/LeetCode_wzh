@@ -1,0 +1,30 @@
+/*
+my own version
+*/
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        int Len = heights.length;
+        int[] area = new int[Len];
+        int maxArea = 0;
+        for (int i=0; i<Len; ++i) {
+            area[i] = heights[i];
+            /*Time exceed if deleting the below if statement */
+            if ((i != 0) && (heights[i] == heights[i-1])) {
+                area[i] = area[i-1];
+                continue;
+            }
+            for (int j=i+1; j<Len; ++j) {
+                if (heights[j] >= heights[i]) area[i] += heights[i];
+                else break;
+            }
+            for (int j=i-1; j>=0; --j) {
+                if (heights[j] >= heights[i]) area[i] += heights[i];
+                else break;
+            }
+            if (area[i] > maxArea) maxArea = area[i];
+        }
+
+
+        return maxArea;
+    }
+}

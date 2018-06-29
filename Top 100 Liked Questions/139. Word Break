@@ -1,0 +1,48 @@
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Map<Character, List<String>> map = new HashMap<>();
+
+        for (String item: wordDict) {
+            char firstA = item.charAt(0);
+            List<String> L = new ArrayList<>();
+
+            if (!map.containsKey(firstA)) {
+                L.add(item);
+            } else {
+                L = map.get(firstA);
+                L.add(item);
+            }
+            map.put(firstA, L);
+        }
+        return helper(0, s, map);
+    }
+
+    public boolean helper (int start, String s, Map<Character, List<String>> map) {
+        //以下这两个语句要放在
+        // char ch = s.charAt(start);
+        // 这个语句的前面
+        if (start > s.length()) return false;
+        if (start == s.length()) return true;
+
+        char ch = s.charAt(start);
+        if (!map.containsKey(ch)) return false;
+
+
+        List<String> L = map.get(ch);
+
+        boolean flag = false;
+        for (String item: L) {
+            boolean dirNext = false;
+            for (int i=0; i<item.length(); ++i) {
+                if ((start+i >= s.length()) || s.charAt(start+i) != item.charAt(i)) {
+                    dirNext = true;
+                    break;
+                }
+            }
+            if (dirNext) continue;
+            if(helper(start+item.length(), s, map) == true)  return true;
+        }
+
+        return flag;
+    }
+}

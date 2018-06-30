@@ -1,0 +1,28 @@
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int Len = nums.length;
+        int[] rel = new int[Len];
+        int zeroCount = 0, val = 1, zeroIndx = -1;
+        
+        int i = 0;
+        for (i=0; i<Len; ++i) {
+            if (nums[i] != 0)
+                val *= nums[i];
+            else {
+                ++zeroCount;
+                if (zeroCount == 2) return rel;
+                zeroIndx = i;
+            }
+        }
+        
+        if (zeroIndx != -1) rel[zeroIndx] = val;
+        else {
+            rel[0] = val/nums[0];
+            for (i=1; i<Len; ++i) {
+                rel[i] = rel[i-1]*nums[i-1]/nums[i];
+            }
+        }
+        
+        return rel;
+    }
+}

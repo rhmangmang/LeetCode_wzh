@@ -1,0 +1,35 @@
+class Solution {
+    public int numIslands(char[][] grid) {
+        int ROWMAX = grid.length;
+        
+        if (ROWMAX == 0) return 0;
+        int COLMAX = grid[0].length;
+
+        boolean[][] isVisited = new boolean[ROWMAX][COLMAX];
+
+        int countIsland = 0;
+        for (int rowIndx=0; rowIndx<ROWMAX; ++rowIndx) {
+            for (int colIndx=0; colIndx<COLMAX; ++colIndx) {
+                if ((grid[rowIndx][colIndx] == '1') && !isVisited[rowIndx][colIndx]) {
+                    helperDFS(grid, isVisited, rowIndx, colIndx);
+                    ++countIsland;
+                }
+            }
+        }
+        return countIsland;
+    }
+
+    void helperDFS (char[][] grid, boolean[][] isVisited, int rowIndx, int colIndx) {
+        isVisited[rowIndx][colIndx] = true;
+
+        int ROWMAX = grid.length, COLMAX = grid[0].length;
+        if (((rowIndx-1) >= 0) && (grid[rowIndx-1][colIndx]=='1') && !isVisited[rowIndx-1][colIndx])
+            helperDFS(grid, isVisited, rowIndx-1, colIndx);
+        if (((rowIndx+1) < ROWMAX) && (grid[rowIndx+1][colIndx]=='1') && !isVisited[rowIndx+1][colIndx])
+            helperDFS(grid, isVisited, rowIndx+1, colIndx);
+        if (((colIndx-1) >= 0) && (grid[rowIndx][colIndx-1]=='1') && !isVisited[rowIndx][colIndx-1])
+            helperDFS(grid, isVisited, rowIndx, colIndx-1);
+        if (((colIndx+1) < COLMAX) && (grid[rowIndx][colIndx+1]=='1') && !isVisited[rowIndx][colIndx+1])
+            helperDFS(grid, isVisited, rowIndx, colIndx+1);
+    }
+}

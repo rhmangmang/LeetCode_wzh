@@ -1,0 +1,35 @@
+    public int monotoneIncreasingDigits(int N) {
+        //countDigitNum是标记N的长度
+        // backIndx标记的是：数字序列倒数第backIndx-1个数字比倒数第backIndx个数字大
+        int aheadNum, backNum=0, backIndx=-1, countDigitNum=0;
+        int Ncopy = N;
+        if (N != 0) {
+            backNum = N%10;
+            N /= 10;
+            ++countDigitNum;
+        } else return 0;
+
+        while (N != 0) {
+            aheadNum = N%10;
+            N /= 10;
+
+            if (aheadNum > backNum)  {
+                backIndx=countDigitNum;
+                --aheadNum;
+            }
+            backNum = aheadNum;
+            ++countDigitNum;
+        }
+
+        if (backIndx != -1) {
+            for (int i=1; i<=backIndx; ++i) {
+                Ncopy /= 10;
+            }
+            --Ncopy;
+            for (int i=1; i<=backIndx; ++i) {
+                Ncopy *= 10;
+                Ncopy += 9;
+            }
+        }
+        return Ncopy;
+    }

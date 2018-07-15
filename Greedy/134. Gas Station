@@ -1,0 +1,38 @@
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int negGas=0, posGas=0;
+        int i=0;
+
+        while (i<gas.length) {
+            int temp = cost[i]-gas[i];
+            if (temp > 0) negGas -= temp;
+            else break;
+            ++i;
+        }
+
+        boolean flag = true;
+
+        int startPoint=-1;
+        while (i < gas.length) {
+            startPoint = i;
+            while (i < gas.length) {
+                if (posGas < 0 && gas[i] > cost[i]) {
+                    startPoint = -1;
+                    negGas += posGas;
+                    posGas = 0;
+                    break;
+                }
+                if (gas[i] > cost[i]) {
+                    posGas += gas[i]-cost[i];
+                } else posGas -= cost[i]-gas[i];
+                ++i;
+            }
+        }
+
+//        if (posGas < 0) return -1;
+//        if (posGas == 0 && negGas<0) return -1;
+//        if (posGas < negGas) return -1;
+        if (posGas+negGas < 0) return -1;
+        else return startPoint;
+    }
+}

@@ -1,0 +1,22 @@
+class Solution {
+    public int[] countBits(int num) {
+        int[] dp = new int[num+1];
+        
+        dp[0] = 0;
+        if (num == 0) return dp;
+        dp[1] = 1;
+        if (num == 1) return dp;
+        
+        int next2Power = 2;
+        for (int i=2; i<=num; ++i) {
+            if (i < next2Power) {
+                int temp = next2Power/2;
+                dp[i] = dp[temp]+dp[i-temp];
+            } else {
+                dp[next2Power] = 1;
+                next2Power *= 2;
+            }
+        }
+        return dp;
+    }
+}

@@ -1,0 +1,32 @@
+class Solution {
+    public int findLongestChain(int[][] pairs) {
+        int[] dp = new int[pairs.length];
+        if (pairs.length == 0) return 0;
+        Arrays.sort(pairs, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[0] < o2[0]) return -1;
+                else return 1;
+            }
+        });
+
+        dp[0] = 1;
+        int relMax=0;
+        for (int i=1; i<pairs.length; ++i) {
+            int maxLen=1;
+            for (int j=i; j>=0; --j) {
+                if (pairs[i][0] > pairs[j][1]) {
+                    if (maxLen < dp[j]+1) maxLen = dp[j]+1;
+                }
+            }
+            dp[i] = maxLen;
+            if (maxLen > relMax) relMax=maxLen;
+        }
+
+//        for (int[] item: pairs) {
+//            for (int it: item) System.out.println(it);
+//        }
+        return relMax;
+
+    }
+}

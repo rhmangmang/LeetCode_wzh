@@ -1,0 +1,22 @@
+class Solution {
+    public int integerBreak(int n) {
+        int[] dpProd = new int[n+1];
+        
+        dpProd[2] = 1;
+        dpProd[1] = 1;
+        for (int i=3; i<=n; ++i) {
+            int maxProd=0;
+            for (int j=1; j<=i/2; ++j) {
+                //j, (i-j)分别表示i能拆成的两个数
+                int num1 = dpProd[j]>j?dpProd[j]:j;
+                int num2 = dpProd[i-j]>(i-j)?dpProd[i-j]:(i-j);
+                
+                int temp = num1*num2;
+                if (temp > maxProd) maxProd = temp;
+                
+            }
+            dpProd[i] = maxProd;
+        }
+        return dpProd[n];
+    }
+}

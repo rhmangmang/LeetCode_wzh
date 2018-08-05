@@ -1,0 +1,21 @@
+class Solution {
+    public int rob(int[] nums) {
+        if (nums == null) return 0;
+        int Len = nums.length;
+        if (Len == 0) return 0;
+        
+        // dp[i][k]表示从下标0到i(inclusive)的maxSum
+        // k表示nums[i]的值是否被加入maxSum, k=0表示没有， k=1表示有
+        int[][] dp = new int[Len][2];
+        
+        dp[0][1] = nums[0];
+        dp[0][0] = 0;
+        
+        for (int i=1; i<Len; ++i) {
+            dp[i][1] = dp[i-1][0] + nums[i];
+            dp[i][0] = dp[i-1][1]>dp[i-1][0]?dp[i-1][1]:dp[i-1][0];
+        }
+        
+        return dp[Len-1][0]>dp[Len-1][1]?dp[Len-1][0]:dp[Len-1][1];
+    }
+}

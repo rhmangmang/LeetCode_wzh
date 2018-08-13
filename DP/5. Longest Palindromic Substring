@@ -1,0 +1,49 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        int N = s.length();
+        if (N == 0) return s;
+        int leftIndx=0, rightIndx=0, len=1;
+        boolean isDouble = false;
+        
+        // the first condition: 
+        // suppose that we take s.charAt(i) as the center, 
+        // then we need to check whether s.charAt(i-j) and s.charAt(i+j) are equal with j belonging to [1, N/2]
+        for (int i=0; i<N; ++i) {
+            int j = 1;
+            while (j<=N/2){
+                if ((i-j>=0) && (i+j<N) && (s.charAt(i+j) == s.charAt(i-j))) {
+                    ++j;
+                    continue;
+                }
+                else break;
+            }
+            int tempLen = i+(j-1)-(i-(j-1))+1;
+            if (tempLen > len) {
+                leftIndx = i-(j-1);
+                rightIndx = i+(j-1);
+                len = tempLen;
+            }
+        }
+        // the second condition: 
+        // suppose that we take s.charAt(i) and s.charAt(j) as the center, 
+        // then we need to check whether s.charAt(i-k) and s.charAt(j+k) are equal with k belonging to [1, N/2]
+        for (int i=0, j=1; i<N && j<N; ++i, ++j) {
+            if (s.charAt(i) == s.charAt(j)) {
+                int k = 1;
+                while (k<=N/2) {
+                    if ((i-k>=0) && (j+k<N) && (s.charAt(i-k) == s.charAt(j+k))) {
+                        ++k;
+                        continue;
+                    } else break;
+                }
+                int tempLen = j+(k-1)-(i-(k-1))+1;
+                if (tempLen > len) {
+                    leftIndx = i-(k-1);
+                    rightIndx = j+(k-1);
+                    len = tempLen;
+                }
+            }
+        }
+        return s.substring(leftIndx, rightIndx+1);
+    }
+}

@@ -1,0 +1,25 @@
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int Len = s.length();
+        Deque<Character> queue = new ArrayDeque<>(Len);
+        boolean[] isExisted = new boolean[260];
+        Arrays.fill(isExisted, false);
+
+        int rel = 0;
+        for (int i=0; i<Len; ++i) {
+            if (isExisted[s.charAt(i)] == false) {
+                queue.addLast(s.charAt(i));
+                isExisted[s.charAt(i)] = true;
+            } else {
+                queue.addLast(s.charAt(i));
+                while (!queue.isEmpty()) {
+                    char ch = queue.poll();
+                    if (ch == s.charAt(i)) break;
+                    isExisted[ch] = false;
+                }
+            }
+            if (queue.size() > rel) rel = queue.size();
+        }
+        return rel;
+    }
+}

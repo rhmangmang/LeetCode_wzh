@@ -1,0 +1,18 @@
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> relList = new ArrayList<>();
+
+        if (nums == null || nums.length == 0) return relList;
+        helper(nums, new ArrayList<Integer>(), relList);
+        return relList;
+    }
+    public void helper (int[] nums, List<Integer> myList, List<List<Integer>> relList) {
+        if (myList.size() == nums.length) relList.add(new ArrayList<Integer>(myList));
+        for (int i=0; i<nums.length; ++i) {
+            if (myList.contains(nums[i]) == true) continue;
+            myList.add(nums[i]);
+            helper(nums, myList, relList);
+            myList.remove(myList.size()-1);
+        }
+    }
+}

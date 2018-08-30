@@ -1,0 +1,23 @@
+class Solution {
+    public void rotate(int[][] matrix) {
+        if (matrix == null) return ;
+        int rowLen = matrix.length;
+        if (rowLen == 0) return ;
+        int colLen = matrix[0].length;
+        
+        for (int rowI=0; rowI<rowLen; ++rowI) {
+            for (int colI=0; colI<rowI; ++colI) {
+                int temp = matrix[rowI][colI];
+                matrix[rowI][colI] = matrix[colI][rowI];
+                matrix[colI][rowI] = temp;
+            }
+        }
+        for (int rowI=0; rowI<rowLen; ++rowI) {
+            for (int colI=0; colI<colLen/2; ++colI) {
+                int temp = matrix[rowI][colI];
+                matrix[rowI][colI] = matrix[rowI][colLen-1-colI];
+                matrix[rowI][colLen-1-colI] = temp;
+            }
+        }
+    }
+}

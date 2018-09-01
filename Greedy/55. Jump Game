@@ -1,0 +1,27 @@
+class Solution {
+    public boolean canJump(int[] nums) {
+        int Len = nums.length;
+        int lastIndx = Len-1;
+        boolean[] dp = new boolean[Len];
+
+        if (Len <= 1) return true;
+
+        Arrays.fill(dp, false);
+
+        if (nums[Len-2] >= 1) dp[Len-2] = true;
+
+        for (int inDx = Len-3; inDx >= 0; --inDx) {
+            if((inDx+nums[inDx]) >= lastIndx) {
+                dp[inDx] = true;
+                continue;
+            }
+            for (int numVal = nums[inDx]; numVal >= 1; --numVal) {
+                if (dp[inDx+numVal]) {
+                    dp[inDx] = true;
+                    break;
+                }
+            }
+        }
+        return dp[0];
+    }
+}

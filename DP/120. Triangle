@@ -1,0 +1,25 @@
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int rowNum = triangle.size();
+        int[] arr = new int[rowNum];
+        int arrSize = 0; // the variable indicates the number of inputted elements in arr.
+        
+        List<Integer> lastList = triangle.get(rowNum-1);
+        
+        for (int i=0; i<lastList.size(); ++i) arr[i] = lastList.get(i);
+        arrSize = lastList.size();
+    
+        for (int rowIndx = rowNum-2; rowIndx >= 0; --rowIndx) {
+            List<Integer> rowList = triangle.get(rowIndx);
+                
+            for (int i=0; i<arrSize-1; ++i) {
+                int ele = rowList.get(i);
+                if (arr[i] > arr[i+1]) arr[i] = arr[i+1]+ele;
+                else arr[i] += ele;
+            }
+            arrSize -= 1;
+        }
+        
+        return arr[0];
+    }
+}

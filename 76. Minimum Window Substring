@@ -1,0 +1,49 @@
+class Solution {
+    public static String minWindow(String s, String t) {
+        int startPos = 0, tLen = t.length(), sLen = s.length();
+
+        int resultLen = Integer.MAX_VALUE, resultLeftIndx=0, resultRightIndx=-1;
+        int flagLen = 0;
+        Map<Character, Integer> dictT = new HashMap<Character, Integer>();
+
+        for (int i = 0; i < tLen; i++) {
+            if (dictT.containsKey(t.charAt(i)) == false) dictT.put(t.charAt(i), 1);
+            else {
+                int count = dictT.get(t.charAt(i));
+                dictT.put(t.charAt(i), count + 1);
+            }
+        }
+
+        for (int leftIndx = 0, rightIndx = 0; rightIndx < sLen; ++rightIndx) {
+            char ch = s.charAt(rightIndx);
+
+            if (dictT.containsKey(ch) == true) {
+                int count = dictT.get(ch);
+                if (count == 1) ++flagLen;
+                dictT.put(s.charAt(rightIndx), count - 1);
+            }
+
+            while (leftIndx < rightIndx && flagLen == dictT.size()) {
+                if ((rightIndx-leftIndx+1) < resultLen) {
+                    resultLen = rightIndx-leftIndx+1;
+                    resultLeftIndx = leftIndx;
+                    resultRightIndx = rightIndx;
+                }
+
+                ch = s.charAt(leftIndx);
+                ++leftIndx;
+                if (dictT.containsKey(ch) == true) {
+                    int count = dictT.get(ch);
+                    dictT.put(s.charAt(leftIndx-1), count + 1);
+                    if (count == 0) {
+                        --flagLen;
+                        break;
+                    }
+                }
+
+            }
+        }
+        // if (resultRightIndx == -1) return "";
+        return s.substring(resultLeftIndx, resultRightIndx+1);
+    }
+}

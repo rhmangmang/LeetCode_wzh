@@ -1,0 +1,48 @@
+class Solution {
+    
+    public boolean helper (char[][] board, String word, int boardX, int boardY, int wordIndx, boolean[][] isVisited) {
+        int rowLen = board.length;
+        int colLen = board[0].length;
+        
+        boolean isTrue;
+        if (isVisited[boardX][boardY] == true) return false;
+        if (word.charAt(wordIndx) == board[boardX][boardY]) {
+            if (wordIndx == word.length()-1) return true;
+            
+            isVisited[boardX][boardY] = true;
+            if (boardY+1 < colLen) {
+                isTrue = helper(board, word, boardX, boardY+1, wordIndx+1, isVisited);
+                if (isTrue == true) return true;
+            }
+            if (boardY-1 >= 0) {
+                isTrue = helper(board, word, boardX, boardY-1, wordIndx+1, isVisited);
+                if (isTrue == true) return true;
+            }
+            if (boardX+1 < rowLen) {
+                isTrue = helper(board, word, boardX+1, boardY, wordIndx+1, isVisited);
+                if (isTrue == true) return true;
+            }
+            if (boardX-1 >= 0) {
+                isTrue = helper(board, word, boardX-1, boardY, wordIndx+1, isVisited);
+                if (isTrue == true) return true;
+            }
+            isVisited[boardX][boardY] = false;
+            return false;
+        } else return false;
+    }
+        
+    public boolean exist(char[][] board, String word) {
+        boolean isTrue;
+        int rowLen = board.length;
+        int colLen = board[0].length;
+        boolean[][] isVisited = new boolean[rowLen][colLen];
+        
+        for (int i = 0; i < rowLen; ++i) {
+            for (int j = 0; j < colLen; ++j) {
+                isTrue = helper(board, word, i, j, 0, isVisited);
+                if (isTrue == true) return true;
+            }
+        }
+        return false;
+    }
+}

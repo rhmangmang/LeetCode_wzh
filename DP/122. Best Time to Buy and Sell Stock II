@@ -1,0 +1,16 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        
+        if (prices == null) return 0;
+        
+        int Len = prices.length;
+        if (Len == 0) return 0;
+        
+        int resultMaxSum = 0;
+        
+        for (int i=1; i<Len; ++i) {
+            if (prices[i] >= prices[i-1]) resultMaxSum += prices[i] - prices[i-1];
+        }
+        return resultMaxSum;
+    }
+}

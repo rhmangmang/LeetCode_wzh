@@ -1,0 +1,50 @@
+/*
+Java: non-DP solution
+*/
+class Solution {
+    public int maxProfit(int[] prices) {
+        
+        if (prices == null) return 0;
+        
+        int Len = prices.length;
+        if (Len == 0) return 0;
+        
+        int curMaxSum = 0;
+        int resultMaxSum = 0;
+        
+        for (int i=1; i<Len; ++i) {
+            if (prices[i] >= prices[i-1]) curMaxSum += prices[i] - prices[i-1];
+            else {
+                if (curMaxSum > resultMaxSum) resultMaxSum = curMaxSum;
+                if ( (prices[i-1]-prices[i]) >= curMaxSum) {
+                    curMaxSum = 0;
+                } else curMaxSum -= (prices[i-1]-prices[i]);
+            } 
+        }
+        return curMaxSum>resultMaxSum?curMaxSum:resultMaxSum;
+    }
+}
+
+/*
+ Java: DP-solution
+*/
+class Solution {
+    public int maxProfit(int[] prices) {
+        int max = 0, Len = prices.length;
+        int[] dp = new int[Len];
+        
+        if (prices.length == 0) return 0;
+        
+        dp[0] = prices[0];
+        for (int i=1; i<prices.length; ++i) {
+            if (prices[i] > dp[i-1]) {
+                dp[i] = dp[i-1];
+                int temp = prices[i]-dp[i-1];
+                if (max < temp) max = temp;
+            }
+            else dp[i] = prices[i];
+        }
+        
+        return max;
+    }
+}

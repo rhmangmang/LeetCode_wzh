@@ -1,0 +1,32 @@
+class Solution {
+    int[] sNums;
+    Random random;
+    
+    public Solution(int[] nums) {
+        sNums = nums;
+        random = new Random();    
+    }
+    
+    public int pick(int target) {
+        int k = 0;
+        int resIndx = 0;
+        
+        for (int i=0; i<sNums.length; ++i) {
+            if (target == sNums[i]) {
+                if (k == 0) resIndx = i;
+                else {
+                    if (random.nextInt(k+1) == k) resIndx = i;
+                }
+                ++k;
+            }
+        }
+        
+        return resIndx;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int param_1 = obj.pick(target);
+ */

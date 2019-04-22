@@ -1,0 +1,31 @@
+class Solution {
+    public int longestOnes (int[] A, int K) {
+        int maxLength = 0;
+        int leftIndx = 0, rightIndx = 0;
+
+        int tempLength = 0;
+
+        while (rightIndx < A.length) {
+            if (A[rightIndx] == 1) {
+                ++tempLength;
+                ++rightIndx;
+            }
+            else if (K != 0)  {
+                ++tempLength;
+                ++rightIndx;
+                --K;
+            }
+            if (tempLength > maxLength) maxLength = tempLength;
+            if ((rightIndx < A.length) && (A[rightIndx] == 0) && (K == 0)) {
+                
+                while (A[leftIndx++] == 1) {
+                    --tempLength;
+                }
+                --tempLength;
+                ++K;
+             }
+
+        }
+        return maxLength;
+    }
+}

@@ -1,0 +1,36 @@
+class Solution {
+    public int maxTurbulenceSize(int[] A) {
+        int maxLength = 1;
+        int tempLength = 1;
+        int preStatus = 0;
+        int i = 0;
+
+        while (i<A.length-1 && A[i] == A[i+1]) ++i;
+
+        if (i < A.length-1) {
+            if (A[i] < A[i+1]) preStatus = -1;
+            else preStatus = 1;
+            ++i;
+            ++tempLength;
+        }
+
+        while (i < A.length-1) {
+            if (A[i]>A[i+1] && preStatus==-1) {
+                preStatus = 1;
+                ++tempLength;
+
+            } else if (A[i]<A[i+1] && preStatus==1) {
+                preStatus = -1;
+                ++tempLength;
+            } else {
+                if (A[i] < A[i+1]) preStatus = -1;
+                else preStatus = 1;
+                if (maxLength < tempLength) maxLength = tempLength;
+                tempLength = 2;
+            }
+            ++i;
+        }
+
+        return maxLength<tempLength?tempLength:maxLength;
+    }
+}

@@ -1,0 +1,16 @@
+n = int(input())
+ 
+dic = {}
+for i in range(n):
+    x = input().split()
+    dic[x[1]] = [x[0],x[2]]   
+ 
+m = int(input())
+ 
+if m == 1:
+    z = input()
+    print(' '.join(dic[z]))
+else:
+    z = input().split()
+    for a in range(m):
+        print(' '.join(dic[z[a]]))
